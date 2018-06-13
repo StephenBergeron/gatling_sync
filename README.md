@@ -12,6 +12,10 @@ This project use Rsync over ssh with public/private key authentication to synchr
 
 ## Getting Started
 
+The intended workflow is to use your workstation (local machine) for development and debugging purposes. 
+Once you are satisfied with your performance simulation, these instructions will get you a copy of Gatling up and running on your `test_server`. 
+That allow to isolate the simulation from network noise.
+
 You need to setup ssh login on the remote `test_server` with public/private keys. 
 This is a common procedure and I prefer it over tools such as sshpass.
 
@@ -20,14 +24,10 @@ From your `workstation`, with the `test_user` credential, push your public key t
 scp $HOME/.ssh/id_rsa.pub ${test_user}@${test_server}:/tmp
 ~~~~
 
-* Then append the public key to the authorized keys on your remote `test_server`:
+Then append the public key to the authorized keys on your remote `test_server`:
 ```
 ssh -l ${test_user}@${test_server}
 cat id_rsa.pub >> .ssh/authorized_keys
 ```
-
-The intended workflow is to use your workstation (local machine) for development and debugging purposes. 
-Once you are satisfied with your performance simulation, these instructions will get you a copy of Gatling up and running on your `test_server`. 
-That allow to isolate the simulation from network noise.
 
 Again, this is a personal project...
