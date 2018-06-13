@@ -15,14 +15,14 @@ This project use Rsync over ssh with public/private key authentication to synchr
 You need to setup ssh login on the remote `test_server` with public/private keys. 
 This is a common procedure and I prefer it over tools such as sshpass.
 
-* From your `workstation`, push your public key to the `test_server`: For example
+From your `workstation`, with the `test_user` credential, push your public key to the `test_server` 
 ~~~~
-scp $HOME/.ssh/id_rsa.pub username@${test_server}
+scp $HOME/.ssh/id_rsa.pub ${test_user}@${test_server}:/tmp
 ~~~~
 
 * Then append the public key to the authorized keys on your remote `test_server`:
 ```
-ssh -l username@${test_server}
+ssh -l ${test_user}@${test_server}
 cat id_rsa.pub >> .ssh/authorized_keys
 ```
 
