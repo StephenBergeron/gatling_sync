@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Assumption - the $USER is the same on the local workstation and the remote test server.
+
+#
+# $HOME/projects/poltergeist/resources/
+directories=(${GATLING_HOME}/                     \
+             $HOME/projects/bin/                   \
+             $HOME/projects/poltergeist/bin/        \
+             $HOME/projects/poltergeist/simulations/ \
+             $HOME/projects/Specter/bin/   \
+             ${HOME}/projects/Specter/home/ \
+             $CACHEDIR/systeminfo/           \
+             $CACHEDIR/suite.validate/)
+
+for d in ${directories[@]}; do
+    echo "* ${d}"
+    rsync -a --exclude '.git'               \
+          --exclude 'scommand'               \
+          --exclude 'cloudtest_percentile'    \
+          --checksum --perms --progress -z     \
+          --rsync-path="mkdir -p ${d} && rsync" \
+          -e "ssh" ${d} ${test_server}:${d} &> /dev/null
+done
+
+
+#
+files=(${HOME}/.gitconfig  \
+       ${HOME}/.gitmessage  \
+       ${HOME}/.bash_profile \
+       $CACHEDIR/personas.csv \
+       $CACHEDIR/tenants.csv)
+
+for f in ${files[@]}; do
+    echo "* ${f}"
+    rsync -L \
+          -a --checksum --perms --progress -z \
+          -e "ssh" ${f} ${test_server}:${f} &> /dev/null
+done
