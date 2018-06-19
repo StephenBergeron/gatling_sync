@@ -4,12 +4,13 @@
 
 #
 # $HOME/projects/poltergeist/resources/
-directories=(${GATLING_HOME}/                     \
-             $HOME/projects/bin/                   \
+directories=(${GATLING_HOME}/                \
+             $HOME/projects/gatling_sync/bin/ \
+             $HOME/projects/bin/               \
+             $HOME/projects/Specter/bin/        \
+             $HOME/projects/Specter/home/        \
              $HOME/projects/poltergeist/bin/        \
              $HOME/projects/poltergeist/simulations/ \
-             $HOME/projects/Specter/bin/   \
-             ${HOME}/projects/Specter/home/ \
              $CACHEDIR/systeminfo/           \
              $CACHEDIR/suite.validate/)
 
