@@ -1,0 +1,54 @@
+#!/bin/bash
+
+# Override setting
+export composition="Gatling"
+
+# ---
+# Ensure this folder exist in case we relocate (see near the end)
+mkdir -p $CACHEDIR/${simulation}
+
+G_SIMULATION=$1
+G_SIMULATIONS_FOLDER=$HOME/projects/poltergeist/simulations/
+# G_DATA_FOLDER=$HOME/projects/vertical-db/MVPTimekeepingAndBasicScheduling/data/xhealthcare
+# G_DATA_FOLDER=$HOME/projects/vertical-db-performance/MVPTimekeepingAndBasicScheduling/data/xhealthcare
+G_DATA_FOLDER=$HOME/projects/cx-expand/data/xhealthcare
+G_RESULTS_FOLDER=${GATLING_HOME}/results
+
+if [[ (-z "${wfm_cloudappname}") ]]
+then
+    echo "@gatling_wrapper; WARNING No context define - missing wfm_cloudappname"
+    echo "@gatling_wrapper; Exit 0"
+    exit 0
+fi
+
+if [ $# -eq 0 ]
+then
+    echo "@gatling_wrapper; WARNING Missing simulation"
+    echo "@gatling_wrapper; Exit 0"
+    exit 0
+fi
+
+
+###
+rm -f gatling.log
+gatling.sh -df ${G_DATA_FOLDER} -rf ${G_RESULTS_FOLDER} -sf ${G_SIMULATIONS_FOLDER} -s ${G_SIMULATION}
+###
+
+last=${G_RESULTS_FOLDER}/$(ls -t ${G_RESULTS_FOLDER} | head -1)
+last_gatling_simulation=$(basename $last)
+
+relocate=${CACHEDIR}/${simulation}
+mkdir -p ${relocate}
+cp -r $last ${relocate}
+if [ -e gatling.log ]
+then
+    # echo "copy gatling log to ${relocate}"
+    cp gatling.log ${relocate}
+    # touch gatling.log
+fi
+last2=${relocate}/${last_gatling_simulation}
+gatling_stats.py -i $(find $last2 -name stats.json)
+echo "@gatling_wrapper; last=${last}"
+echo "@gatling_wrapper; last_gatling_simulation=${last_gatling_simulation}"
+echo "@gatling_wrapper; last2=${last2}"
+echo "@gatling_wrapper; End ${G_SIMULATION}"
