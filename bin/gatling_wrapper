@@ -14,9 +14,9 @@ G_SIMULATIONS_FOLDER=$HOME/projects/poltergeist/simulations/
 G_DATA_FOLDER=$HOME/projects/cx-expand/data/xhealthcare
 G_RESULTS_FOLDER=${GATLING_HOME}/results
 
-if [[ (-z "${wfm_cloudappname}") ]]
+if [[ (-z "${cloudappname}") ]]
 then
-    echo "@gatling_wrapper; WARNING No context define - missing wfm_cloudappname"
+    echo "@gatling_wrapper; WARNING No context define - missing cloudappname"
     echo "@gatling_wrapper; Exit 0"
     exit 0
 fi
